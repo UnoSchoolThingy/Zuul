@@ -25,6 +25,7 @@ class Room {
   void removeItem(Item* item);
   vector<Item*> getItems(); 
   char* getName();
+  char* getDescription();
   Room* getRoomAtExit(int exit);
   vector<pair<int, Room*>> getExits();
   static const char* getExitName(int pos);

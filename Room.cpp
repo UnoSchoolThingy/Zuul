@@ -22,12 +22,16 @@ void Room::removeItem(Item* item) {
   }
 }
 
-vector<Item*> getItems() {
+vector<Item*> Room::getItems() {
   return items;
 }
 
 char* Room::getName() {
   return name;
+}
+
+char* Room::getDescription() {
+  return desc;
 }
 
 Room* Room::getRoomAtExit(int exit) {

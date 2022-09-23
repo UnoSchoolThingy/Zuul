@@ -69,5 +69,53 @@ int main() {
   // Setup done 
   cout << "Welcome to Zuul!\n";
   int playerPos = 0; // Start at 1-20
+  char in[100]; // String input 
+  char inc; // Character input 
+  int ini; // Integer input 
+  while (true) {
+    Room* r = rooms[playerPos];
+    auto items = r->getItems();
+    cout << r->getDescription() << "\n";
+    cout << "Exits: \n";
+    for (auto e : r->getExits()) {
+      cout << Room::getExitName(e.first) << ": " << e.second->getName() << '\n';
+    }
+    cout << '\n';
+    if (items.empty()) {
+      cout << "There are no items in the room.\n";
+    }
+    else {
+      cout << "Items in the room: \n";
+      for (int i = 0; i < items.size(); i++) {
+	cout << '[' << (i + 1) << "] " << items[i]->getName() << '\n';
+      }
+    }
+    cout << endl; // New line and flush output stream
+    // Ask user for action (not making an actual system because I really don't want to open more emacs windows)
+    while (true) {
+      cout << "Pick up(p), drop(d), move(m), or quit(q): ";
+      cin >> inc;
+      cin.ignore();
+      inc = tolower(inc);
+      // No switch statement cuz break is easier this way
+      if (inc == 'q') {
+	cout << "Thanks for playing!\n";
+	return 0;
+      }
+      if (inc == 'p') {
+	
+	break;
+      }
+      if (inc == 'd') {
+
+	break;
+      }
+      if (inc == 'm') {
+
+	break;
+      }
+      cout << "Invalid option!\n";
+    }
+  }
   return 0;
 }
