@@ -27,6 +27,7 @@ class Room {
   char* getName();
   char* getDescription();
   Room* getRoomAtExit(int exit);
+  Room* getRoomFromExitChar(char c);
   vector<pair<int, Room*>> getExits();
   static const char* getExitName(int pos);
 };

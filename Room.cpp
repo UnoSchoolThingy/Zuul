@@ -38,6 +38,17 @@ Room* Room::getRoomAtExit(int exit) {
   return exits[exit];
 }
 
+Room* Room::getRoomFromExitChar(char c) {
+  static map<char, int> m = {
+     { 'n', POS_NORTH },
+     { 's', POS_SOUTH },
+     { 'e', POS_EAST },
+     { 'w', POS_WEST },
+  };
+  if (m.count(c) < 1) return nullptr;
+  return exits[m[c]];
+}
+
 vector<pair<int, Room*>> Room::getExits() {
   return vector<pair<int, Room*>>(exits.begin(), exits.end());
 }

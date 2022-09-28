@@ -68,19 +68,31 @@ int main() {
   }
   // Setup done 
   cout << "Welcome to Zuul!\n";
-  int playerPos = 0; // Start at 1-20
   char in[100]; // String input 
   char inc; // Character input 
-  int ini; // Integer input 
+  int ini; // Integer input
+  Room* r = rooms[0]; // Start at 1-20
   while (true) {
-    Room* r = rooms[playerPos];
+    // Lose case
+    if (r == rooms[8]) { // If we are in the library
+      for (Item* i : inv) {
+	if (strcmp(i->getName(), "Horn") == 0) { // We picked up the horn last turn
+	  cout << "The horn makes noise as you pick it up and you get kicked out. You lose.\n";
+	  return 0;
+	}
+      }
+    }
+    bool hasHorn = false;
+    // Play the game 
     auto items = r->getItems();
+    cout << "==============================\n";
     cout << r->getDescription() << "\n";
     cout << "Exits: \n";
     for (auto e : r->getExits()) {
       cout << Room::getExitName(e.first) << ": " << e.second->getName() << '\n';
     }
     cout << '\n';
+    // Print room items 
     if (items.empty()) {
       cout << "There are no items in the room.\n";
     }
@@ -91,27 +103,75 @@ int main() {
       }
     }
     cout << endl; // New line and flush output stream
+    // Print inventory items 
+    if (inv.empty()) {
+      cout << "There are no items in your inventory.\n";
+    }
+    else {
+      cout << "Items in your inventory: \n";
+      for (int i = 0; i < inv.size(); i++) {
+        cout << '[' << (i + 1) << "] " << inv[i]->getName() << '\n';
+      }
+    }
+    cout << endl; // New line and flush output stream 
     // Ask user for action (not making an actual system because I really don't want to open more emacs windows)
     while (true) {
       cout << "Pick up(p), drop(d), move(m), or quit(q): ";
       cin >> inc;
       cin.ignore();
       inc = tolower(inc);
-      // No switch statement cuz break is easier this way
       if (inc == 'q') {
 	cout << "Thanks for playing!\n";
 	return 0;
       }
       if (inc == 'p') {
-	
+      plab:
+	cout << "Enter the room item number to pick up (listed above): ";
+	cin >> inc; 
+	if (!isdigit(inc)) {
+	  cout << "Please enter a number!\n";
+	  goto plab;
+	}
+	ini = inc - '0';
+	cin.ignore(0);
+	if (ini > items.size()) { // Make sure it's not out of range 
+	  cout << "There's no item numbered " << ini << "!\n";
+	  goto plab;
+	}
+	inv.push_back(items[--ini]);// Add item to inventory 
+	r->removeItem(items[ini]); // Get rid of the item
 	break;
       }
       if (inc == 'd') {
-
-	break;
+      dlab:
+        cout << "Enter the inventory item number to pick up (listed above): ";
+        cin >> inc;
+	if (!isdigit(inc)) {
+          cout << "Please enter a number!\n";
+          goto dlab;
+        }
+        ini = inc - '0';
+        cin.ignore(0);
+        if (ini > inv.size()) { // Make sure it's not out of range
+          cout << "There's no item numbered " << ini << "!\n";
+          goto dlab;
+        }
+        r->addItem(inv[--ini]); // Add the item to the room 
+        inv.erase(inv.begin() + ini);
+        break;
       }
       if (inc == 'm') {
-
+      mlab:
+	cout << "Enter the exit you want to go to (N, S, E, W): ";
+	cin >> inc;
+	cin.ignore();
+	inc = tolower(inc);
+	Room* nr = r->getRoomFromExitChar(inc);
+	if (nr == nullptr) {
+	  cout << "There is no such available room!\n";
+	  goto mlab;
+	}
+	r = nr;
 	break;
       }
       cout << "Invalid option!\n";
