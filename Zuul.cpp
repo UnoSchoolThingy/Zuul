@@ -7,6 +7,7 @@
 
 using namespace std;
 
+// Get adjacent nodes (for adding connections initially) 
 inline vector<pair<int, int>> getAdj(int x, int y) {
   vector<pair<int, int>> res;
   if (y - 1 >= 0) res.push_back({x, y - 1}); // North
@@ -21,6 +22,7 @@ inline vector<pair<int, int>> getAdj(int x, int y) {
 }
 
 int main() {
+  // Vector of rooms 
   vector<Room*> rooms = {
     new Room("1-20", "You are currently in the 1-20 lab at Sunset. All the cool people are hanging out here."), // 0
     new Room("CAD Room", "You care in the CAD room."), // 1 
@@ -132,7 +134,7 @@ int main() {
 	cout << "Thanks for playing!\n";
 	return 0;
       }
-      if (inc == 'p') {
+      if (inc == 'p') { // Pick up 
       plab:
 	if (items.empty()) {
 	  cout << "There are no items in this room!\n";
@@ -144,7 +146,7 @@ int main() {
 	  cout << "Please enter a number!\n";
 	  goto plab;
 	}
-	ini = inc - '0';
+	ini = inc - '0'; // Convert single digit to number 
 	cin.ignore(0);
 	if (ini > items.size()) { // Make sure it's not out of range 
 	  cout << "There's no item numbered " << ini << "!\n";
@@ -154,7 +156,7 @@ int main() {
 	r->removeItem(items[ini]); // Get rid of the item
 	break;
       }
-      if (inc == 'd') {
+      if (inc == 'd') { // Drop 
       dlab:
 	if (inv.empty()) {
 	  cout << "There are no items in your inventory!\n";
@@ -166,7 +168,7 @@ int main() {
           cout << "Please enter a number!\n";
           goto dlab;
         }
-        ini = inc - '0';
+        ini = inc - '0'; // Convert single digit to number 
         cin.ignore(0);
         if (ini > inv.size()) { // Make sure it's not out of range
           cout << "There's no item numbered " << ini << "!\n";
@@ -176,7 +178,7 @@ int main() {
         inv.erase(inv.begin() + ini);
         break;
       }
-      if (inc == 'm') {
+      if (inc == 'm') { // Move 
       mlab:
 	cout << "Enter the exit you want to go to (N, S, E, W): ";
 	cin >> inc;
