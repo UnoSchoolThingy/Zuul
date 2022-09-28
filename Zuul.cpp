@@ -1,6 +1,6 @@
 /* Uno Pasadhika 
  * Zuul game - move around a school building 
- * 9/15/2022 
+ * 9/28/2022 
  */
 
 #include "Room.h"
@@ -82,7 +82,15 @@ int main() {
 	}
       }
     }
-    bool hasHorn = false;
+    // Win case
+    if (r == rooms[3]) { // If we are in the pub 
+      for (Item* i : inv) {
+        if (strcmp(i->getName(), "Pizza") == 0) { // We picked up the pizza last turn 
+          cout << "You have acquired a pizza. Pizza is good. You win.\n";
+          return 0;
+        }
+      }
+    }
     // Play the game 
     auto items = r->getItems();
     cout << "==============================\n";
@@ -126,6 +134,10 @@ int main() {
       }
       if (inc == 'p') {
       plab:
+	if (items.empty()) {
+	  cout << "There are no items in this room!\n";
+	  continue;
+	}
 	cout << "Enter the room item number to pick up (listed above): ";
 	cin >> inc; 
 	if (!isdigit(inc)) {
@@ -144,6 +156,10 @@ int main() {
       }
       if (inc == 'd') {
       dlab:
+	if (inv.empty()) {
+	  cout << "There are no items in your inventory!\n";
+	  continue;
+	}
         cout << "Enter the inventory item number to pick up (listed above): ";
         cin >> inc;
 	if (!isdigit(inc)) {
